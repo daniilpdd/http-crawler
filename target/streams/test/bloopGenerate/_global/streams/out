@@ -1,0 +1,4 @@
+[debug] [http-crawler-test] Classpath dependencies List()
+[debug] [http-crawler-test] Dependencies from configurations List(http-crawler)
+[debug] Bloop wrote the configuration of project 'http-crawler-test' to 'C:\Projects\scala\http-crawler\.bloop\http-crawler-test.json'
+[success] Generated .bloop\http-crawler-test.json
