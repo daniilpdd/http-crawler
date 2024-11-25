@@ -1,10 +1,11 @@
 package org.daniilpdd.crawler.routes
 
 import org.daniilpdd.crawler.service.CrawlerService
+import org.daniilpdd.crawler.service.client.RequestService
 import zio.http.{Method, Request, Response, Routes, Status, handler}
 
 object CrawlerRoutes {
-  def routes() = Routes(
+  def routes(): Routes[RequestService, Nothing] = Routes(
     Method.POST / "api" / "urls" -> handler { req: Request =>
       (for {
         urls <- req.body.asString.map(_.split('\n').map(_.trim).filter(_.nonEmpty).distinct)
