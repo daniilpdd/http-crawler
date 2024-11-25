@@ -20,4 +20,6 @@ libraryDependencies ++= Seq(
   "dev.zio" %% "zio-test-magnolia" % "2.1.13" % Test
 )
 
+libraryDependencies += "dev.zio" %% "zio-json" % "0.7.3"
+
 scalacOptions += "-Ymacro-annotations"
