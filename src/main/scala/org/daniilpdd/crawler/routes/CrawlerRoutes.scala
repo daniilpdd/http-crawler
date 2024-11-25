@@ -26,6 +26,8 @@ object CrawlerRoutes {
         queryParam <- req.queryParamToZIO("urls")(StringCodec)
         encodedUrls <- ZIO.attempt(queryParam.split(',').map(_.trim).filter(_.nonEmpty))
         urls <- ZIO.foreach(encodedUrls)(u => ZIO.fromEither(URL.decode(u)))
+        _ <- ZIO.logDebug(urls.mkString("(", ",", ")"))
+        _ <- ZIO.logInfo(s"urls size: ${urls.length}")
         res <- CrawlerService.getTitles(urls)
       } yield Response.text(res.mkString("\n"))).orElseFail({
         Response.error(Status.InternalServerError)
