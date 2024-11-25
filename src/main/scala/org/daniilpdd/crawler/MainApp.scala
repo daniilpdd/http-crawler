@@ -10,7 +10,7 @@ object MainApp extends ZIOAppDefault {
 
   override def run: ZIO[Any with ZIOAppArgs with Scope, Any, Any] =
     Server
-      .serve(CrawlerRoutes.routes.handleErrorZIO(CrawlerRoutes.handleError))
+      .serve(CrawlerRoutes.routes.handleErrorCauseZIO(CrawlerRoutes.handleError))
       .provide(
         Server.defaultWithPort(8080),
         RequestService.live,

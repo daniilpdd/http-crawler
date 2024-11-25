@@ -32,8 +32,8 @@ object CrawlerRoutes {
     }
   )
 
-  val handleError: Throwable => UIO[Response] = throwable => for {
-    _ <- ZIO.logErrorCause(Cause.fail(throwable))
+  val handleError: Cause[Throwable] => UIO[Response] = cause => for {
+    _ <- ZIO.logErrorCause(cause)
     response <- ZIO.succeed(Response.error(Status.InternalServerError))
   } yield response
 }
