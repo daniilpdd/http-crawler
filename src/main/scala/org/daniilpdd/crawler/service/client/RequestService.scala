@@ -26,7 +26,10 @@ case class RequestServiceLive(client: Client) extends RequestService {
     data <- response.body.asString
     m <- ZIO.fromOption(RequestServiceLive.titleRegex.findFirstMatchIn(data)).orElseFail(new RuntimeException("title not found"))
     res <- ZIO.attempt(m.group(1))
-  } yield res).fold(e => e.getMessage, r => r)
+  } yield res).foldZIO(e => for {
+    _ <- ZIO.logWarning(s"An error occurred while getting the title from the $url: ${e.getMessage}")
+    res <- ZIO.succeed(e.getMessage)
+  } yield res, r => ZIO.succeed(r))
 }
 
 private object RequestServiceLive {
