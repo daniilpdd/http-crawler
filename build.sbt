@@ -12,15 +12,15 @@ libraryDependencies ++= Seq(
   "dev.zio" %% "zio-macros" % zioVersion
 )
 
-libraryDependencies += "dev.zio" %% "zio-http" % "3.0.1"
-
+val testVersion = "2.1.13"
 libraryDependencies ++= Seq(
-  "dev.zio" %% "zio-test" % "2.1.13" % Test,
-  "dev.zio" %% "zio-test-sbt" % "2.1.13" % Test,
-  "dev.zio" %% "zio-test-magnolia" % "2.1.13" % Test
+  "dev.zio" %% "zio-test" % testVersion % Test,
+  "dev.zio" %% "zio-test-sbt" % testVersion % Test,
+  "dev.zio" %% "zio-test-magnolia" % testVersion % Test
 )
 
 libraryDependencies += "dev.zio" %% "zio-json" % "0.7.3"
+libraryDependencies += "dev.zio" %% "zio-http" % "3.0.1"
 
 scalacOptions += "-Ymacro-annotations"
 
