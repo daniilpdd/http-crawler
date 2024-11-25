@@ -8,7 +8,7 @@ import scala.util.matching.Regex
 
 @accessible
 trait RequestService {
-  def getTitle(url: String): UIO[String]
+  def getTitle(url: URL): UIO[String]
 }
 
 object RequestService {
@@ -17,13 +17,12 @@ object RequestService {
 }
 
 case class RequestServiceIdentical() extends RequestService {
-  override def getTitle(url: String): UIO[String] = ZIO.succeed(url)
+  override def getTitle(url: URL): UIO[String] = ZIO.succeed(url.encode)
 }
 
 case class RequestServiceLive(client: Client) extends RequestService {
-  override def getTitle(url: String): UIO[String] = (for {
-    _url <- ZIO.fromEither(URL.decode(url))
-    response <- client.url(_url).batched(Request.get("/"))
+  override def getTitle(url: URL): UIO[String] = (for {
+    response <- client.url(url).batched(Request.get("/"))
     data <- response.body.asString
     m <- ZIO.fromOption(RequestServiceLive.titleRegex.findFirstMatchIn(data)).orElseFail(new RuntimeException("title not found"))
     res <- ZIO.attempt(m.group(1))
