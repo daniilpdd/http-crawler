@@ -12,7 +12,7 @@ object MainApp extends ZIOAppDefault {
     Server
       .serve(CrawlerRoutes.routes())
       .provide(
-        Server.default,
+        Server.defaultWithPort(8080),
         RequestService.live,
         Client.default,
         ResponseWrapper.json

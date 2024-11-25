@@ -23,3 +23,10 @@ libraryDependencies ++= Seq(
 libraryDependencies += "dev.zio" %% "zio-json" % "0.7.3"
 
 scalacOptions += "-Ymacro-annotations"
+
+enablePlugins(JavaAppPackaging)
+enablePlugins(DockerPlugin)
+
+dockerExposedPorts := Seq(8080)
+
+dockerBaseImage := "openjdk:23-jdk"
