@@ -8,6 +8,11 @@ import zio.http.{Method, Request, Response, Routes, Status, URL, handler}
 import zio.{Cause, UIO, ZIO}
 
 object CrawlerRoutes {
+  val handleError: Cause[Throwable] => UIO[Response] = cause => for {
+    _ <- ZIO.logErrorCause(cause)
+    response <- ZIO.succeed(Response.error(Status.InternalServerError))
+  } yield response
+
   val routes: Routes[ResponseWrapper with RequestService, Throwable] = Routes(
     Method.POST / "api" / "urls" -> handler { req: Request =>
       for {
@@ -31,9 +36,4 @@ object CrawlerRoutes {
       } yield response
     }
   )
-
-  val handleError: Cause[Throwable] => UIO[Response] = cause => for {
-    _ <- ZIO.logErrorCause(cause)
-    response <- ZIO.succeed(Response.error(Status.InternalServerError))
-  } yield response
 }
