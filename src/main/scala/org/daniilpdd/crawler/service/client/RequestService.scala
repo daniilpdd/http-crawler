@@ -2,13 +2,13 @@ package org.daniilpdd.crawler.service.client
 
 import zio.http.{Client, Request, URL}
 import zio.macros.accessible
-import zio.{Task, ZIO, ZLayer}
+import zio.{UIO, ZIO, ZLayer}
 
 import scala.util.matching.Regex
 
 @accessible
 trait RequestService {
-  def getTitle(url: String): Task[String]
+  def getTitle(url: String): UIO[String]
 }
 
 object RequestService {
@@ -17,17 +17,17 @@ object RequestService {
 }
 
 case class RequestServiceIdentical() extends RequestService {
-  override def getTitle(url: String): Task[String] = ZIO.succeed(url)
+  override def getTitle(url: String): UIO[String] = ZIO.succeed(url)
 }
 
 case class RequestServiceLive(client: Client) extends RequestService {
-  override def getTitle(url: String): Task[String] = for {
+  override def getTitle(url: String): UIO[String] = (for {
     _url <- ZIO.fromEither(URL.decode(url))
     response <- client.url(_url).batched(Request.get("/"))
     data <- response.body.asString
     m <- ZIO.fromOption(RequestServiceLive.titleRegex.findFirstMatchIn(data)).orElseFail(new RuntimeException("title not found"))
     res <- ZIO.attempt(m.group(1))
-  } yield res
+  } yield res).fold(e => e.getMessage, r => r)
 }
 
 private object RequestServiceLive {
