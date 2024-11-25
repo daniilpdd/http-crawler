@@ -1,21 +1,15 @@
-name := "http-crawler"
+ThisBuild / version := "0.1"
+ThisBuild / scalaVersion := "2.13.15"
 
-version := "0.1"
+lazy val root = (project in file("."))
+  .settings(
+    name := "http-crawler"
+  )
 
-scalaVersion := "2.13.15"
+val zioVersion = "2.1.11"
+libraryDependencies += "dev.zio" %% "zio" % zioVersion
+libraryDependencies += "dev.zio" %% "zio-macros" % zioVersion
 
-triggeredMessage := Watched.clearWhenTriggered
+libraryDependencies += "dev.zio" %% "zio-http" % "3.0.1"
 
-autoStartServer := false
-
-scalacOptions ++= Seq(
-  "-feature",
-  "-deprecation",
-  "-language:implicitConversions",
-  "-language:higherKinds"
-)
-
-addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")
-
-libraryDependencies += "dev.zio" %% "zio" % "2.1.13"
-libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "2.0.1"
+scalacOptions += "-Ymacro-annotations"
