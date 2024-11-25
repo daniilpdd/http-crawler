@@ -3,9 +3,9 @@ package org.daniilpdd.crawler.routes
 import org.daniilpdd.crawler.routes.wrapper.ResponseWrapper
 import org.daniilpdd.crawler.service.CrawlerService
 import org.daniilpdd.crawler.service.client.RequestService
-import zio.{UIO, ZIO}
 import zio.http.codec.TextCodec.StringCodec
 import zio.http.{Method, Request, Response, Routes, Status, URL, handler}
+import zio.{Cause, UIO, ZIO}
 
 object CrawlerRoutes {
   val routes: Routes[ResponseWrapper with RequestService, Throwable] = Routes(
@@ -33,7 +33,7 @@ object CrawlerRoutes {
   )
 
   val handleError: Throwable => UIO[Response] = throwable => for {
-    _ <- ZIO.logError(throwable.getMessage)
+    _ <- ZIO.logErrorCause(Cause.fail(throwable))
     response <- ZIO.succeed(Response.error(Status.InternalServerError))
   } yield response
 }
