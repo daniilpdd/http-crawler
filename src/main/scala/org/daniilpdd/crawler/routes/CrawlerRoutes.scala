@@ -5,8 +5,6 @@ import org.daniilpdd.crawler.service.client.RequestService
 import zio.ZIO
 import zio.http.codec.TextCodec.StringCodec
 import zio.http.{Method, Request, Response, Routes, Status, URL, handler}
-import zio.ZIO
-import zio.http.{Method, Request, Response, Routes, Status, handler}
 
 object CrawlerRoutes {
   def routes(): Routes[RequestService, Nothing] = Routes(
