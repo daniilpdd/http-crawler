@@ -1,4 +1,4 @@
-package org.daniilpdd.crawler.client
+package org.daniilpdd.crawler.service.client
 
 import zio.http.{Client, Request, URL}
 import zio.macros.accessible
